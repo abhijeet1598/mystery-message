@@ -23,6 +23,8 @@ import { useCompletion } from "ai/react";
 import Image from "next/image";
 import EmojiPicker from "emoji-picker-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
+import { Separator } from "@/components/ui/separator";
+import Link from "next/link";
 
 const initialMessageString =
   "What's your favorite movie?||Do you have any pets?||What's your dream job?";
@@ -102,7 +104,7 @@ const PublicPage = () => {
         Welcome to Mystery Message
       </h1>
       <Form {...form}>
-        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+        <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
           <FormField
             control={form.control}
             name="content"
@@ -169,6 +171,13 @@ const PublicPage = () => {
           )}
         </CardContent>
       </Card>
+      <Separator className="my-6" />
+      <div className="text-center">
+        <div className="mb-4">Get Your Message Board</div>
+        <Link href={"/sign-up"}>
+          <Button>Create Your Account</Button>
+        </Link>
+      </div>
     </div>
   );
 };

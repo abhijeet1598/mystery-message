@@ -1,30 +1,68 @@
 "use client";
 
-import { useCompletion } from "ai/react";
+import Image from "next/image";
+import Link from "next/link";
+import { Button } from "@/components/ui/button";
+import { Mail } from "lucide-react"; // Assuming you have an icon for messages
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import Autoplay from "embla-carousel-autoplay";
+import messages from "@/messages.json";
 
-export default function Chat() {
-  const { completion, input, handleInputChange, handleSubmit, error } =
-    useCompletion({ api: "/api/generate-messages" });
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel";
+import Navbar from "@/components/Navbar";
 
+export default function Home() {
   return (
-    <div className="flex flex-col w-full max-w-md py-24 mx-auto stretch">
-      <h4 className="text-xl font-bold text-gray-900 md:text-xl pb-4">
-        useCompletion Example
-      </h4>
-      {error && (
-        <div className="fixed top-0 left-0 w-full p-4 text-center bg-red-500 text-white">
-          {error.message}
-        </div>
-      )}
-      {completion}
-      <form onSubmit={handleSubmit}>
-        <input
-          className="fixed bottom-0 w-full max-w-md p-2 mb-8 border border-gray-300 rounded shadow-xl"
-          value={input}
-          placeholder="Say something..."
-          onChange={handleInputChange}
-        />
-      </form>
-    </div>
+    <>
+      {/* Main content */}
+      <Navbar />
+      <main className="flex-grow flex flex-col items-center justify-center px-4 md:px-24 py-12">
+        <section className="text-center mb-8 md:mb-12">
+          <h1 className="text-3xl md:text-5xl font-bold">
+            Want to receive anonymous messages?
+          </h1>
+          <p className="mt-3 md:mt-4 text-base md:text-lg">
+            Now everyone will be able to send messages - Where their identity
+            remains a secret.
+          </p>
+        </section>
+
+        {/* Carousel for Messages */}
+        <Carousel
+          plugins={[Autoplay({ delay: 2000 })]}
+          className="w-full max-w-lg md:max-w-xl"
+        >
+          <CarouselContent>
+            {messages.map((message, index) => (
+              <CarouselItem key={index} className="p-4">
+                <Card>
+                  <CardHeader>
+                    <CardTitle>{message.title}</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex flex-col md:flex-row items-start space-y-2 md:space-y-0 md:space-x-4">
+                    <Mail className="flex-shrink-0" />
+                    <div>
+                      <p>{message.content}</p>
+                      <p className="text-xs text-muted-foreground">
+                        {message.received}
+                      </p>
+                    </div>
+                  </CardContent>
+                </Card>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
+      </main>
+
+      {/* Footer */}
+      <footer className="text-center p-2 md:p-4 bg-gray-900 text-white absolute bottom-0 w-full">
+        © 2024 Mystery Message. All rights reserved.
+      </footer>
+    </>
   );
 }
