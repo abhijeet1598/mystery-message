@@ -23,7 +23,7 @@ import { Input } from "@/components/ui/input";
 import { Loader2 } from "lucide-react";
 import Link from "next/link";
 
-const page = () => {
+const SignUpPage = () => {
   const [username, setUsername] = useState("");
   const [usernameCheckMsg, setUsernameCheckMsg] = useState("");
   const [isCheckingUsername, setIsCheckingUsername] = useState(false);
@@ -191,4 +191,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default SignUpPage;
