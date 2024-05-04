@@ -28,7 +28,7 @@ export default function ResponseEmail({ response }: ResponseEmailProps) {
           fontStyle="normal"
         />
       </Head>
-      <Preview>Here&apos;s your verification code: {otp}</Preview>
+      <Preview>Reply from Mystery Message</Preview>
       <Section>
         <Row>
           <Heading as="h2">Hello,</Heading>
