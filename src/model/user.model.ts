@@ -3,6 +3,8 @@ import mongoose, { Schema, Document } from "mongoose";
 export interface Message extends Document {
   content: string;
   createdAt: Date;
+  senderEmail: string;
+  isReplied: boolean;
 }
 
 const messageSchema: Schema<Message> = new Schema({
@@ -14,6 +16,13 @@ const messageSchema: Schema<Message> = new Schema({
     type: Date,
     default: Date.now(),
     required: true,
+  },
+  senderEmail: {
+    type: String,
+  },
+  isReplied: {
+    type: Boolean,
+    default: false,
   },
 });
 

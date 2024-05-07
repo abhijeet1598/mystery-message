@@ -54,8 +54,8 @@ const SignInPage = () => {
         title: "Signed in successfully",
       });
     }
-
-    router.push("/dashboard");
+    setIsSubmitting(false);
+    router.replace("/dashboard");
   };
 
   return (
@@ -107,11 +107,10 @@ const SignInPage = () => {
               />
             </div>
             <div className="flex flex-col items-center justify-center gap-4">
-              {isSubmitting ? (
-                <Loader2 className="animate-spin" />
-              ) : (
-                <Button type="submit">Sign In</Button>
-              )}
+              <Button type="submit" disabled={isSubmitting}>
+                {isSubmitting ? "Please wait" : "Sign in"}
+              </Button>
+
               <p>
                 Don&apos;t have an account?{" "}
                 <Link href={"/sign-up"} className="text-blue-600">

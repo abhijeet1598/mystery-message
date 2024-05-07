@@ -25,6 +25,9 @@ import EmojiPicker from "emoji-picker-react";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import Link from "next/link";
+import { Switch } from "@/components/ui/switch";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
 
 const initialMessageString =
   "What's your favorite movie?||Do you have any pets?||What's your dream job?";
@@ -35,13 +38,15 @@ const parseAIMessages = (messageString: string): string[] => {
 
 const PublicPage = () => {
   const [isEmojiPickerOpen, setIsEmojiPickerOpen] = useState(false);
+  const [isReplyChecked, setIsReplyChecked] = useState(false);
+  const [email, setEmail] = useState("");
   const [isSending, setIsSending] = useState(false);
   const params = useParams<{ username: string }>();
   const form = useForm<z.infer<typeof messageSchema>>({
     resolver: zodResolver(messageSchema),
   });
-  const { register, handleSubmit, watch, setValue } = form;
-  const messageContent = watch("content");
+
+  const messageContent = form.watch("content");
 
   const { toast } = useToast();
 
@@ -51,12 +56,17 @@ const PublicPage = () => {
       const res = await axios.post<ApiResponse>("/api/send-message", {
         ...data,
         username: params.username,
+        senderEmail: email ? email : "",
       });
       toast({
         title: "Message sent successfully",
         description: res.data.message,
       });
       form.reset({ ...form.getValues(), content: "" });
+      if (isReplyChecked) {
+        setIsReplyChecked(false);
+        setEmail("");
+      }
     } catch (error) {
       const axiosError = error as AxiosError<ApiResponse>;
       toast({
@@ -93,6 +103,14 @@ const PublicPage = () => {
     form.setValue("content", message);
   };
 
+  const handleSwitchChange = () => {
+    setIsReplyChecked((prev) => !prev);
+  };
+
+  const handleEmailChange = (e: any) => {
+    setEmail(e.target.value);
+  };
+
   // const onEmojiClick = (event, emojiObject) => {
   //   setContent((prevContent) => prevContent + emojiObject.emoji);
   //   setIsEmojiPickerOpen((prev) => !prev);
@@ -118,24 +136,34 @@ const PublicPage = () => {
                 </FormControl>
 
                 <FormMessage />
-                {/* <Image
-                  src="/emoji-icon.png"
-                  height={20}
-                  width={20}
-                  alt="emoji-icon"
-                  onClick={() => setIsEmojiPickerOpen((prev) => !prev)}
-                /> */}
-                {/* <EmojiPicker
-                  open={isEmojiPickerOpen}
-                  onEmojiClick={onEmojiClick}
-                /> */}
               </FormItem>
             )}
           />
+          <div className="flex items-center space-x-2">
+            <Switch
+              id="receive-reply"
+              checked={isReplyChecked}
+              onCheckedChange={handleSwitchChange}
+            />
+            <Label htmlFor="receive-reply">
+              Wish to receive a reply from @{params.username}
+            </Label>
+          </div>
+          {isReplyChecked && (
+            <Input
+              type="email"
+              placeholder="Email"
+              className="w-1/2"
+              value={email}
+              onChange={handleEmailChange}
+            />
+          )}
           {isSending ? (
             <Loader2 className="animate-spin" />
           ) : (
-            <Button type="submit">Send</Button>
+            <Button type="submit" disabled={isReplyChecked && email == ""}>
+              Send
+            </Button>
           )}
         </form>
       </Form>

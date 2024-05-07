@@ -15,6 +15,11 @@ export const authOptions: NextAuthOptions = {
           type: "email",
           placeholder: "john@example.com",
         },
+        username: {
+          label: "Username",
+          type: "text",
+          placeholder: "john123",
+        },
         password: { label: "Password", type: "password" },
       },
       async authorize(credentials: any): Promise<any> {

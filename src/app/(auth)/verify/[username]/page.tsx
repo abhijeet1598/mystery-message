@@ -6,7 +6,7 @@ import { ApiResponse } from "@/types/ApiResponse";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios, { AxiosError } from "axios";
 import { useParams, useRouter } from "next/navigation";
-import React from "react";
+import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -22,6 +22,7 @@ import {
 import { Input } from "@/components/ui/input";
 
 const VerifyAccount = () => {
+  const [isVerifying, setIsVerifying] = useState(false);
   const router = useRouter();
   const params = useParams<{ username: string }>();
   const { toast } = useToast();
@@ -62,7 +63,7 @@ const VerifyAccount = () => {
           Verify Account
         </h1>
         <p className="text-center font-bold">
-          Please enter the verification received on your email address
+          Please enter the verification code received on your email address
         </p>
         <Form {...form}>
           <form
@@ -86,7 +87,9 @@ const VerifyAccount = () => {
               />
             </div>
             <div className="flex items-center justify-center">
-              <Button type="submit">Verify account</Button>
+              <Button type="submit" disabled={isVerifying}>
+                {isVerifying ? "Verifying your account" : "Verify account"}
+              </Button>
             </div>
           </form>
         </Form>

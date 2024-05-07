@@ -1,9 +1,8 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -13,7 +12,7 @@ import { useToast } from "./ui/use-toast";
 import axios, { AxiosError } from "axios";
 import { ApiResponse } from "@/types/ApiResponse";
 import { Button } from "./ui/button";
-import { X } from "lucide-react";
+import { CircleAlert, CircleCheckBig, X } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -26,7 +25,17 @@ import {
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
 import dayjs from "dayjs";
-import mongoose from "mongoose";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Textarea } from "./ui/textarea";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 
 type messageCardProps = {
   message: Message;
@@ -34,7 +43,12 @@ type messageCardProps = {
 };
 
 const MessageCard = ({ message, onMessageDelete }: messageCardProps) => {
+  const [replyMessage, setReplyMessage] = useState("");
+  const [isSending, setIsSending] = useState(false);
+  const [isReplied, setIsReplied] = useState(false);
   const { toast } = useToast();
+  const { senderEmail } = message;
+
   const handleDelete = async () => {
     try {
       const response = await axios.delete<ApiResponse>(
@@ -52,6 +66,36 @@ const MessageCard = ({ message, onMessageDelete }: messageCardProps) => {
           axiosError.response?.data.message || "Failed to delete message",
         variant: "destructive",
       });
+    }
+  };
+
+  const handleReplyMessageChange = (e: any) => {
+    setReplyMessage(e.target.value);
+  };
+
+  const handleReplyToSender = async () => {
+    setIsSending(true);
+    try {
+      const response = await axios.post<ApiResponse>("/api/send-reply", {
+        messageId: message._id,
+        replyMessage,
+      });
+      setReplyMessage("");
+      setIsReplied(true);
+      toast({
+        title: "Reply sent successfully",
+        description: response.data.message,
+      });
+    } catch (error) {
+      const axiosError = error as AxiosError<ApiResponse>;
+      toast({
+        title: "Error",
+        description:
+          axiosError.response?.data.message || "Failed to send reply",
+        variant: "destructive",
+      });
+    } finally {
+      setIsSending(false);
     }
   };
   return (
@@ -87,6 +131,57 @@ const MessageCard = ({ message, onMessageDelete }: messageCardProps) => {
         </div>
       </CardHeader>
       <CardContent></CardContent>
+      <CardFooter>
+        {!message.isReplied && !isReplied && message.senderEmail && (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button>Reply</Button>
+            </DialogTrigger>
+            <DialogContent className="sm:max-w-[425px] w-4/5 w-full:sm">
+              <DialogHeader>
+                <DialogTitle>Reply to sender</DialogTitle>
+                <DialogDescription>
+                  Your reply will be emailed to the sender of this message
+                </DialogDescription>
+              </DialogHeader>
+              <div className="grid gap-4 py-4">
+                <div className="flex flex-col items-center justify-center">
+                  <Textarea
+                    placeholder="write your reply here"
+                    value={replyMessage}
+                    onChange={handleReplyMessageChange}
+                  />
+                </div>
+              </div>
+              <DialogFooter>
+                <Button
+                  onClick={handleReplyToSender}
+                  type="submit"
+                  disabled={isSending}
+                >
+                  {isSending ? "Sending" : "Send"}
+                </Button>
+              </DialogFooter>
+            </DialogContent>
+          </Dialog>
+        )}
+        {(message.isReplied || isReplied) && (
+          <Alert>
+            <AlertTitle className="flex items-center gap-2">
+              <CircleCheckBig color="#19d76b" />
+              You have replied to this message
+            </AlertTitle>
+          </Alert>
+        )}
+        {!message.senderEmail && (
+          <Alert>
+            <AlertTitle className="flex items-center gap-2">
+              <CircleAlert />
+              Sender has not opted for reply
+            </AlertTitle>
+          </Alert>
+        )}
+      </CardFooter>
     </Card>
   );
 };

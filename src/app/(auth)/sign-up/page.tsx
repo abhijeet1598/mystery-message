@@ -148,7 +148,11 @@ const SignUpPage = () => {
                   <FormItem>
                     <FormLabel>Email</FormLabel>
                     <FormControl>
-                      <Input placeholder="johndoe@example.com" {...field} />
+                      <Input
+                        placeholder="johndoe@example.com"
+                        {...field}
+                        disabled={usernameCheckMsg !== "Username available"}
+                      />
                     </FormControl>
                     <FormMessage />
                   </FormItem>
@@ -166,6 +170,7 @@ const SignUpPage = () => {
                         type="password"
                         placeholder="Write your password"
                         {...field}
+                        disabled={usernameCheckMsg !== "Username available"}
                       />
                     </FormControl>
                     <FormMessage />

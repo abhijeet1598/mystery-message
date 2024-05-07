@@ -63,13 +63,20 @@ const Dashboard = () => {
       setIsSwitchLoading(true);
       try {
         const res = await axios.get<ApiResponse>("/api/get-messages");
-
         setMessages(res.data.messages || []);
+
         if (refresh) {
-          toast({
-            title: "Refreshed Messages",
-            description: "Showing latest messages",
-          });
+          if (messages.length === 0) {
+            toast({
+              title: "No messages found",
+              description: res.data.message,
+            });
+          } else {
+            toast({
+              title: "Refreshed Messages",
+              description: "Showing latest messages",
+            });
+          }
         }
       } catch (error) {
         const axiosError = error as AxiosError<ApiResponse>;
@@ -84,7 +91,7 @@ const Dashboard = () => {
         setIsSwitchLoading(false);
       }
     },
-    [setIsLoading, setMessages]
+    [setIsLoading, setMessages, toast]
   );
 
   // load the intial state
@@ -136,8 +143,8 @@ const Dashboard = () => {
   return (
     <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
       <h1 className="text-4xl font-bold mb-4">Dashboard</h1>
-      <div className="flex items-center justify-between mb-4">
-        <p>
+      <div className="sm:flex items-center justify-between mb-4">
+        <p className="mb-2 sm:mb-0">
           Your profile URL: <strong>{profileUrl}</strong>
         </p>
         <Button onClick={copyToClipboard}>Copy</Button>

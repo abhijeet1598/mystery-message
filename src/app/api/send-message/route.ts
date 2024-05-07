@@ -5,7 +5,8 @@ import { Message } from "@/model/user.model";
 export async function POST(request: Request) {
   await dbConnect();
 
-  const { username, content } = await request.json();
+  const { username, content, senderEmail } = await request.json();
+  console.log("email", senderEmail);
   try {
     const user = await UserModel.findOne({ username });
     if (!user) {
@@ -32,10 +33,15 @@ export async function POST(request: Request) {
       );
     }
 
-    const newMessage = { content, createdAt: new Date() };
+    const newMessage = {
+      content,
+      createdAt: new Date(),
+      senderEmail,
+    };
     user.messages.push(newMessage as Message);
     await user.save();
-
+    console.log(newMessage);
+    console.log(user);
     return Response.json(
       {
         success: true,
