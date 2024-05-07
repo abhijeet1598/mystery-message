@@ -72,11 +72,15 @@ export async function POST(request: Request) {
         $set: { "messages.$.isReplied": true },
       }
     );
-    sendResponseEmail(replyMessage, user.username, senderMessage.senderEmail);
+    const emailResponse = await sendResponseEmail(
+      replyMessage,
+      user.username,
+      senderMessage.senderEmail
+    );
     return Response.json(
       {
         success: true,
-        message: "Message found",
+        message: emailResponse.message,
       },
       { status: 200 }
     );

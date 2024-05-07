@@ -33,13 +33,13 @@ export async function sendResponseEmail(
     // Message sent: <d786aa62-4e0a-070a-47ed-0b0666549519@ethereal.email>
     return {
       success: true,
-      message: "Verification email sent successfully",
+      message: "Reply email sent successfully",
     };
   } catch (error) {
-    console.error("Error while sending verification email ", error);
+    console.error("Error while sending reply email ", error);
     return {
       success: false,
-      message: "Error while sending verification email",
+      message: "Error while sending reply email",
     };
   }
 }
