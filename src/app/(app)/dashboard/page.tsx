@@ -130,7 +130,7 @@ const Dashboard = () => {
   const { username } = session?.user as User;
 
   const baseUrl = `${window.location.protocol}//${window.location.host}`;
-  const profileUrl = `${baseUrl}/u/${username}`; // TODO: append username
+  const profileUrl = `${baseUrl}/u/${username}`;
 
   const copyToClipboard = () => {
     navigator.clipboard.writeText(profileUrl);
@@ -140,7 +140,7 @@ const Dashboard = () => {
   };
 
   return (
-    <div className="my-8 mx-4 md:mx-8 lg:mx-auto p-6 bg-white rounded w-full max-w-6xl">
+    <div className="my-8 p-6 bg-white rounded w-full max-w-6xl md:mx-auto">
       <h1 className="text-4xl font-bold mb-4">Dashboard</h1>
       <div className="sm:flex items-center justify-between mb-4">
         <p className="mb-2 sm:mb-0">
