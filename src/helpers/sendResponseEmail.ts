@@ -20,7 +20,7 @@ export async function sendResponseEmail(
 ) {
   // send mail with defined transport object
   try {
-    const emailHtml = render(ResponseEmail({ response }));
+    const emailHtml = render(ResponseEmail({ response, username }));
     const info = await transporter.sendMail({
       from: `${username} from Mystery Message <info@mysterymessage.com>`, // sender address
       to: email, // list of receivers

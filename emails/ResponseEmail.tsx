@@ -11,9 +11,13 @@ import {
 
 interface ResponseEmailProps {
   response: string;
+  username: string;
 }
 
-export default function ResponseEmail({ response }: ResponseEmailProps) {
+export default function ResponseEmail({
+  response,
+  username,
+}: ResponseEmailProps) {
   return (
     <Html lang="en" dir="ltr">
       <Head>
@@ -28,13 +32,20 @@ export default function ResponseEmail({ response }: ResponseEmailProps) {
           fontStyle="normal"
         />
       </Head>
-      <Preview>Reply from Mystery Message</Preview>
+      <Preview>Reply from {username} @ Mystery Message</Preview>
       <Section>
         <Row>
-          <Heading as="h2">Hello,</Heading>
+          <Text>Hello,</Text>
         </Row>
         <Row>
           <Text>{response}</Text>
+        </Row>
+      </Section>
+      <Section>
+        <Row>
+          <Text>
+            Best, <br /> {username} @ Mystery Message
+          </Text>
         </Row>
       </Section>
     </Html>

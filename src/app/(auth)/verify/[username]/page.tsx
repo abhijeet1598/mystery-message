@@ -57,7 +57,7 @@ const VerifyAccount = () => {
   };
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-sky-500 to-indigo-800 px-4">
       <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
         <h1 className="text-4xl font-extrabold tracking-tight lg:text-4xl mb-6 text-center">
           Verify Account
