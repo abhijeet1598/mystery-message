@@ -7,6 +7,9 @@ import { Mail } from "lucide-react"; // Assuming you have an icon for messages
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Autoplay from "embla-carousel-autoplay";
 import messages from "@/messages.json";
+import { motion } from "framer-motion";
+import { HeroHighlight, Highlight } from "@/components/ui/hero-highlight";
+import { useTypewriter, Cursor } from "react-simple-typewriter";
 
 import {
   Carousel,
@@ -15,17 +18,44 @@ import {
 } from "@/components/ui/carousel";
 import Navbar from "@/components/Navbar";
 
+const words = [
+  {
+    text: "Want",
+  },
+  {
+    text: "to",
+  },
+  {
+    text: "receive",
+  },
+  {
+    text: "message",
+  },
+  {
+    text: "anonymously?",
+    className: "text-blue-500 dark:text-blue-500",
+  },
+];
+
 export default function Home() {
+  const [text] = useTypewriter({
+    words: ["messages?", "feedbacks?", "opinions?"],
+    loop: false,
+  });
   return (
     <>
       {/* Main content */}
       <Navbar />
-      <main className="flex-grow flex flex-col items-center justify-center px-4 md:px-24 py-12">
+      <main className="flex-grow flex flex-col items-center justify-center px-1 md:px-24 py-12">
         <section className="text-center mb-8 md:mb-12">
           <h1 className="text-3xl md:text-5xl font-bold">
-            Want to receive anonymous messages?
+            Want to receive anonymous{" "}
+            <span className="text-blue-500 dark:text-blue-500 md:text-6xl">
+              {text}
+            </span>
+            <Cursor cursorColor="blue" />
           </h1>
-          <p className="mt-3 md:mt-4 text-base md:text-lg">
+          <p className="mt-3 md:mt-4 text-base md:text-lg text-wrap">
             Now everyone will be able to send messages - Where their identity
             remains a secret.
           </p>
@@ -34,7 +64,7 @@ export default function Home() {
         {/* Carousel for Messages */}
         <Carousel
           plugins={[Autoplay({ delay: 2000 })]}
-          className="w-full max-w-lg md:max-w-xl"
+          className="w-4/5 max-w-lg md:max-w-xl"
         >
           <CarouselContent>
             {messages.map((message, index) => (

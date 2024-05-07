@@ -64,17 +64,16 @@ const Dashboard = () => {
       try {
         const res = await axios.get<ApiResponse>("/api/get-messages");
         setMessages(res.data.messages || []);
-
         if (refresh) {
-          if (messages.length === 0) {
-            toast({
-              title: "No messages found",
-              description: res.data.message,
-            });
-          } else {
+          if (res.data.success) {
             toast({
               title: "Refreshed Messages",
               description: "Showing latest messages",
+            });
+          } else {
+            toast({
+              title: "No messages found",
+              description: res.data.message,
             });
           }
         }

@@ -94,8 +94,8 @@ const SignUpPage = () => {
   }, [debouncedUsername]);
 
   return (
-    <div className="flex justify-center items-center min-h-screen bg-gray-100">
-      <div className="w-full max-w-md p-8 space-y-8 bg-white rounded-lg shadow-md">
+    <div className="flex justify-center items-center min-h-screen bg-gradient-to-br from-sky-500 to-indigo-800 px-4">
+      <div className="w-full max-w-md sm:p-8 p-4 py-6 space-y-4 bg-white rounded-lg shadow-md">
         <h1 className="text-4xl font-extrabold tracking-tight lg:text-4xl mb-6 text-center">
           Want to message anonymously?
         </h1>
@@ -105,7 +105,7 @@ const SignUpPage = () => {
         <Form {...form}>
           <form
             onSubmit={form.handleSubmit(onSubmit)}
-            className="flex flex-col item-center justify-center gap-6"
+            className="flex flex-col item-center justify-center gap-2"
           >
             <div className="space-y-8">
               <FormField
@@ -124,23 +124,23 @@ const SignUpPage = () => {
                         }}
                       />
                     </FormControl>
-
+                    {isCheckingUsername && <Loader2 className="animate-spin" />}
+                    {!isCheckingUsername && usernameCheckMsg && (
+                      <p
+                        className={`text-sm ${
+                          usernameCheckMsg === "Username available"
+                            ? "text-green-500"
+                            : "text-red-500"
+                        }`}
+                      >
+                        {usernameCheckMsg}
+                      </p>
+                    )}
                     <FormMessage />
                   </FormItem>
                 )}
               />
-              {isCheckingUsername && <Loader2 className="animate-spin" />}
-              {!isCheckingUsername && usernameCheckMsg && (
-                <p
-                  className={`text-sm ${
-                    usernameCheckMsg === "Username available"
-                      ? "text-green-500"
-                      : "text-red-500"
-                  }`}
-                >
-                  {usernameCheckMsg}
-                </p>
-              )}
+
               <FormField
                 control={form.control}
                 name="email"
@@ -178,7 +178,7 @@ const SignUpPage = () => {
                 )}
               />
             </div>
-            <div className="flex flex-col items-center justify-center gap-4">
+            <div className="flex flex-col items-center justify-center gap-4 mt-4">
               <Button type="submit" disabled={isSubmitting}>
                 {isSubmitting ? "Please wait" : "Sign up"}
               </Button>
